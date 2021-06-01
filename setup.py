@@ -50,7 +50,10 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'cmake=cmake:cmake', 'cpack=cmake:cpack', 'ctest=cmake:ctest'
+            'ccmake=cmake:ccmake',
+            'cmake=cmake:cmake',
+            'cpack=cmake:cpack',
+            'ctest=cmake:ctest'
         ]
     },
 

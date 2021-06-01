@@ -39,7 +39,15 @@ CMAKE_SHARE_DIR = os.path.join(CMAKE_DATA, 'share')
 
 
 def _program(name, args):
-    return subprocess.call([os.path.join(CMAKE_BIN_DIR, name)] + args)
+    path = os.path.join(CMAKE_BIN_DIR, name)
+    if not os.path.exists(path):
+        return "%s is not available at %s" % (name, path)
+    else:
+        return subprocess.call([path] + args)
+
+
+def ccmake():
+    raise SystemExit(_program('ccmake', sys.argv[1:]))
 
 
 def cmake():

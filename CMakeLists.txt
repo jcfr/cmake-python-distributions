@@ -269,13 +269,23 @@ set(CMAKE_EXE_LINKER_FLAGS \"-lstdc++ -lgcc -lrt\" CACHE STRING \"Initial cache\
         find_program(STRIP_EXECUTABLE strip)
         if(STRIP_EXECUTABLE)
 
+          set(ccmake_executable "${CMakeProject_BINARY_DIR}/bin/ccmake")
           set(cmake_executable "${CMakeProject_BINARY_DIR}/bin/cmake")
           set(cpack_executable "${CMakeProject_BINARY_DIR}/bin/cpack")
           set(ctest_executable "${CMakeProject_BINARY_DIR}/bin/ctest")
 
+          # Since the test for ccmake existence can not be done during the project
+          # configuration, stripping conditonally happens in a CMake script.
+          set(EXECUTABLE_TO_STRIP ${ccmake_executable})
+          configure_file(
+            ${CMAKE_SOURCE_DIR}/scripts/strip_executable_if_exists.cmake.in
+            ${CMAKE_BINARY_DIR}/scripts/strip_ccmake_executable_if_exists.cmake
+            )
+
           ExternalProject_Add_Step(CMakeProject-build strip_executables
             DEPENDEES build
             COMMENT "Stripping CMake executables"
+            COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/scripts/strip_ccmake_executable_if_exists.cmake
             COMMAND ${STRIP_EXECUTABLE} ${cmake_executable}
             COMMAND ${STRIP_EXECUTABLE} ${cpack_executable}
             COMMAND ${STRIP_EXECUTABLE} ${ctest_executable}

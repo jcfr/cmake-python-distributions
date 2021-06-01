@@ -1,0 +1,11 @@
+
+set(STRIP_EXECUTABLE "@STRIP_EXECUTABLE@")
+set(EXECUTABLE_TO_STRIP "@EXECUTABLE_TO_STRIP@")
+
+if(EXISTS ${EXECUTABLE_TO_STRIP})
+  execute_process(
+    COMMAND ${STRIP_EXECUTABLE} ${EXECUTABLE_TO_STRIP}
+    )
+else()
+  message(STATUS "Skipping stripping of non existent executable: ${EXECUTABLE_TO_STRIP}")
+endif()
